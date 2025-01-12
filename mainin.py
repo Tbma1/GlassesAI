@@ -27,7 +27,7 @@ try:
     # Create a rotated image
     image1 = Image.new('1', (disp.height, disp.width), "WHITE")
     draw = ImageDraw.Draw(image1)
-    font1 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 14)  # Increase font size
+    font1 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 6)  # Increase font size
 
     while True:
         current_time = datetime.now().strftime("%H:%M:%S")
