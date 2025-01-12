@@ -11,7 +11,7 @@ if os.path.exists(libdir):
 import logging
 import time
 import traceback
-from datetime import datetime  # Import datetime module
+from datetime import datetime
 from waveshare_OLED import OLED_1in51
 from PIL import Image, ImageDraw, ImageFont
 logging.basicConfig(level=logging.DEBUG)
@@ -20,31 +20,37 @@ try:
     disp = OLED_1in51.OLED_1in51()
 
     logging.info("\r1.51inch OLED ")
-    # Initialize library.
     disp.Init()
-    # Clear display.
     logging.info("clear display")
     disp.clear()
 
-    # Create blank image for drawing.
-    image1 = Image.new('1', (disp.width, disp.height), "WHITE")  # Use the correct width and height
+    # Create a rotated image
+    image1 = Image.new('1', (disp.height, disp.width), "WHITE")
     draw = ImageDraw.Draw(image1)
     font1 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 14)  # Increase font size
 
     while True:
-        # Get the current time
         current_time = datetime.now().strftime("%H:%M:%S")
 
         # Clear the display
-        draw.rectangle((0, 0, disp.width, disp.height), fill="WHITE")
+        draw.rectangle((0, 0, disp.height, disp.width), fill="WHITE")
 
-        # Draw the time horizontally
-        draw.text((0, 0), current_time, font=font1, fill=0)
+        # Get text size
+        text_width, text_height = draw.textsize(current_time, font=font1)
 
-        # Display the image
-        disp.ShowImage(disp.getbuffer(image1))
+        # Calculate position to center the text
+        x = (disp.height - text_width) // 2
+        y = (disp.width - text_height) // 2
 
-        # Refresh the display every second
+        # Draw the rotated time
+        draw.text((x, y), current_time, font=font1, fill=0)
+
+        # Rotate the image
+        rotated_image = image1.rotate(90, expand=True)
+
+        # Display the rotated image
+        disp.ShowImage(disp.getbuffer(rotated_image))
+
         time.sleep(1)
 
 except IOError as e:
