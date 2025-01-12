@@ -6,10 +6,10 @@ Glasses AI - It is a project which aim is to create User-Friendly Glasses with A
 
 ## 🌟 Main Features
 
-- **Object Detection:** Мгновенно идентифицирует объекты и людей в поле зрения.
-- **AR:** Накладывает полезную информацию на реальный мир.
-- **Voice Usage:** Интуитивное управление с помощью голосовых команд.
-- **Object Analization:** Определяет эмоциональное состояние окружающих людей.
+- **Object Detection:** Can Detect objects.
+- **AR:** Additional info on glasses glass.
+- **Voice Usage:** Voice Assistant.
+- **Object Analization:** Can analyze object if u ask.
 
 ## 🚀 Start
 
