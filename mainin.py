@@ -16,52 +16,45 @@ from waveshare_OLED import OLED_1in51
 from PIL import Image, ImageDraw, ImageFont
 logging.basicConfig(level=logging.DEBUG)
 
-def draw_text_with_outline(draw, text, position, font, text_color, outline_color):
-    x, y = position
-    # Рисуем обводку
-    for dx, dy in [(-1,-1), (-1,1), (1,-1), (1,1)]:
-        draw.text((x+dx, y+dy), text, font=font, fill=outline_color)
-    
-    # Рисуем основной текст
-    draw.text((x, y), text, font=font, fill=text_color)
-
 try:
     disp = OLED_1in51.OLED_1in51()
 
     logging.info("\r1.51inch OLED ")
     disp.Init()
     
-    # Увеличьте контраст
-    disp.contrast(200)
+    # Увеличьте яркость дисплея
+    disp.SetContrast(255)  # Максимальная яркость
     
     logging.info("clear display")
     disp.clear()
 
-    # Create a rotated image
-    image1 = Image.new('1', (disp.height, disp.width), "BLACK")
+    # Create a rotated image with higher resolution
+    image1 = Image.new('1', (disp.height, disp.width), "WHITE")
     draw = ImageDraw.Draw(image1)
-    font1 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 20)  # Увеличенный размер шрифта
+    
+    # Используйте более крупный и четкий шрифт
+    font1 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 24)  # Увеличен размер шрифта
 
     while True:
         current_time = datetime.now().strftime("%H:%M:%S")
 
-        # Очистка дисплея
-        draw.rectangle((0, 0, disp.height, disp.width), fill="BLACK")
+        # Clear the display
+        draw.rectangle((0, 0, disp.height, disp.width), fill="WHITE")
 
-        # Получение размера текста
+        # Get text size
         text_width, text_height = draw.textsize(current_time, font=font1)
 
-        # Расчет позиции для центрирования
+        # Calculate position to center the text
         x = (disp.height - text_width) // 2
         y = (disp.width - text_height) // 2
 
-        # Рисование текста с обводкой
-        draw_text_with_outline(draw, current_time, (x, y), font1, "WHITE", "BLACK")
+        # Draw the rotated time with increased contrast
+        draw.text((x, y), current_time, font=font1, fill=0)
 
-        # Поворот изображения
+        # Rotate the image
         rotated_image = image1.rotate(90, expand=True)
 
-        # Отображение повернутого изображения
+        # Display the rotated image
         disp.ShowImage(disp.getbuffer(rotated_image))
 
         time.sleep(1)
